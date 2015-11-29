@@ -19,18 +19,19 @@ to use this feature on their projects.
 },
 ```
 
-## For you Bundle
+## For your Bundle
 
 If you want your bundles to provide this feature, then is as simple as make your
 bundles implement an interface. That simple.
 
 ``` php
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 
 /**
  * My Bundle
  */
-class MyBundle implements DependentBundleInterface
+class MyBundle extends Bundle implements DependentBundleInterface
 {
     /**
      * Create instance of current bundle, and return dependent bundle namespaces
@@ -53,12 +54,13 @@ instantiated. Well, see that this method receives the kernel as the unique
 parameter. Use it :)
 
 ``` php
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 
 /**
  * My Bundle
  */
-class MyBundle implements DependentBundleInterface
+class MyBundle extends Bundle implements DependentBundleInterface
 {
     /**
      * Create instance of current bundle, and return dependent bundle namespaces
@@ -86,12 +88,13 @@ In your project, you should be able to resolve all these dependencies. For this,
 this package offers you as well a way of doing that in your kernel.
 
 ``` php
+use Symfony\Component\HttpKernel\Kernel;
 use Mmoreram\SymfonyBundleDependencies\BundleDependenciesResolver;
 
 /**
  * Class AppKernel
  */
-class AppKernel
+class AppKernel extends Kernel
 {
     use BundleDependenciesResolver;
 
@@ -112,12 +115,13 @@ class AppKernel
 In that case, you can pass as well instances of bundles instead of strings.
 
 ``` php
+use Symfony\Component\HttpKernel\Kernel;
 use Mmoreram\SymfonyBundleDependencies\BundleDependenciesResolver;
 
 /**
  * Class AppKernel
  */
-class AppKernel
+class AppKernel extends Kernel
 {
     use BundleDependenciesResolver;
 
@@ -144,12 +148,13 @@ instantiated even if other dependencies do, add this bundle at the beginning of
 your array.
 
 ``` php
+use Symfony\Component\HttpKernel\Kernel;
 use Mmoreram\SymfonyBundleDependencies\BundleDependenciesResolver;
 
 /**
  * Class AppKernel
  */
-class AppKernel
+class AppKernel extends Kernel
 {
     use BundleDependenciesResolver;
 
