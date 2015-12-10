@@ -80,6 +80,9 @@ trait CachedBundleDependenciesResolver
         array $bundles
     ) {
         $cacheFile = $kernel->getCacheDir() . '/kernelDependenciesStack.php';
+        if (!is_dir($kernel->getCacheDir())) {
+            mkdir($kernel->getCacheDir(), 0777, true);
+        }
         if (file_exists($cacheFile)) {
             return include $cacheFile;
         }
