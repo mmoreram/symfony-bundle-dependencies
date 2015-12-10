@@ -18,12 +18,12 @@ namespace Mmoreram\SymfonyBundleDependencies\Tests;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Class BundleDependenciesResolverTest
+ * Class BundleDependenciesResolverTest.
  */
 class BundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test resolver1
+     * Test resolver1.
      */
     public function testResolver1()
     {
@@ -59,7 +59,7 @@ class BundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test resolver
+     * Test resolver.
      */
     public function testResolver2()
     {

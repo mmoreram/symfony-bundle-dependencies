@@ -21,14 +21,14 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Mmoreram\SymfonyBundleDependencies\BundleDependenciesResolver;
 
 /**
- * Class BundleDependenciesResolverAware
+ * Class BundleDependenciesResolverAware.
  */
 class BundleDependenciesResolverAware
 {
     use BundleDependenciesResolver;
 
     /**
-     * Get bundle instances
+     * Get bundle instances.
      *
      * @param KernelInterface $kernel Kernel
      *
@@ -48,7 +48,7 @@ class BundleDependenciesResolverAware
     }
 
     /**
-     * Get bundle instances
+     * Get bundle instances.
      *
      * @param KernelInterface $kernel Kernel
      *

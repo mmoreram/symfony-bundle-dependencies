@@ -16,7 +16,7 @@
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
 /**
- * Class Bundle4
+ * Class Bundle4.
  */
 class Bundle4
 {

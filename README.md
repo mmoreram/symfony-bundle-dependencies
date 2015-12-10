@@ -24,6 +24,9 @@ to use this feature on their projects.
 If you want your bundles to provide this feature, then is as simple as make your
 bundles implement an interface. That simple.
 
+Take in account that this addition will only provide compatibility with projects
+using this project, and will not affect anyway projects not using it.
+
 ``` php
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
@@ -49,9 +52,9 @@ class MyBundle extends Bundle implements DependentBundleInterface
 }
 ```
 
-Maybe one of your bundle dependencies needs the kernel, or special data to be
-instantiated. Well, see that this method receives the kernel as the unique
-parameter. Use it :)
+Maybe one of your bundle dependencies need an specific value in the constructor.
+Well, this is a very very weird case, and you should definitely avoid it, but
+you can do it by adding the instance instead of the namespace.
 
 ``` php
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -72,20 +75,45 @@ class MyBundle extends Bundle implements DependentBundleInterface
         return [
             'Another\Bundle\AnotherBundle',
             'My\Great\Bundle\MyGreatBundle',
-            new \Yet\Another\Bundle\YetAnotherBundle($kernel),
-            new \Even\Another\Bundle\EvenAnotherBundle($kernel, true),
+            new \Even\Another\Bundle\EvenAnotherBundle('some-value'),
         ];
     }
 }
 ```
 
-Applying this change you will just offer the possibility to use it in other
-projects, ignoring it when is not necessary.
+By default, all bundles defined as their namespace are instanced with the kernel
+object as first parameter, so doing something like that doesn't really have
+sense at all.
+
+``` php
+use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
+
+/**
+ * My Bundle
+ */
+class MyBundle implements DependentBundleInterface
+{
+    /**
+     * Create instance of current bundle, and return dependent bundle namespaces
+     *
+     * @return array Bundle instances
+     */
+    public static function getBundleDependencies(KernelInterface $kernel)
+    {
+        return [
+            new \Even\Another\Bundle\EvenAnotherBundle($this),
+        ];
+    }
+}
+```
+
+As you will see later, using instances instead of names will remove the
+possibility of using cache in the final project.
 
 ## For your Kernel
 
-In your project, you should be able to resolve all these dependencies. For this,
-this package offers you as well a way of doing that in your kernel.
+In your project, you should be able to resolve all these dependencies. This is
+why this package offers you as well a way of doing that in your kernel.
 
 ``` php
 use Symfony\Component\HttpKernel\Kernel;
@@ -138,6 +166,48 @@ class AppKernel extends Kernel
     }
 }
 ```
+
+## Performance
+
+As you may see, resolving dependencies can penalize a lot your website
+performance. Each time your Kernel is booted, all dependencies are resolved once
+and again, and this has no sense at all.
+
+This package offers you as well a cache layer, reducing to 0 from the second
+time your Kernel is booted and until your next deployment (cache file is stored
+in Kernel cache folder).
+
+One simple change to your code. That easy.
+
+``` php
+use Mmoreram\SymfonyBundleDependencies\CachedBundleDependenciesResolver;
+
+/**
+ * Class AppKernel
+ */
+class AppKernel
+{
+    use CachedBundleDependenciesResolver;
+
+    /**
+     * Register application bundles
+     *
+     * @return array Array of bundles instances
+     */
+    public function registerBundles()
+    {
+        return $this->getBundleInstances([
+            '\My\Bundle\MyBundle',
+        ]);
+    }
+}
+```
+
+Caching your bundle dependencies resolution can only be used when all
+dependencies are defined as strings instead of instances.
+
+This library assumes that, as soon as something changes in your project that can
+change the dependencies file, you will remove cache. Just take it in account.
 
 ## The order
 
