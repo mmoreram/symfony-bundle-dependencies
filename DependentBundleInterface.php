@@ -18,7 +18,7 @@ namespace Mmoreram\SymfonyBundleDependencies;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Interface DependentBundleInterface
+ * Interface DependentBundleInterface.
  */
 interface DependentBundleInterface
 {

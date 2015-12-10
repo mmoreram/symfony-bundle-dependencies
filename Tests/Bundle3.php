@@ -20,12 +20,12 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 
 /**
- * Class Bundle3
+ * Class Bundle3.
  */
 class Bundle3 implements DependentBundleInterface
 {
     /**
-     * Create instance of current bundle, and return dependent bundle namespaces
+     * Create instance of current bundle, and return dependent bundle namespaces.
      *
      * @return array Bundle instances
      */

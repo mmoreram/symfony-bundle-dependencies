@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 
 /**
- * Class Bundle5
+ * Class Bundle5.
  */
 class Bundle5 implements DependentBundleInterface
 {
@@ -32,7 +32,7 @@ class Bundle5 implements DependentBundleInterface
     protected $value;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param string $value Value
      */
@@ -42,7 +42,7 @@ class Bundle5 implements DependentBundleInterface
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return string Value
      */
@@ -52,7 +52,7 @@ class Bundle5 implements DependentBundleInterface
     }
 
     /**
-     * Create instance of current bundle, and return dependent bundle namespaces
+     * Create instance of current bundle, and return dependent bundle namespaces.
      *
      * @return array Bundle instances
      */

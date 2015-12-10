@@ -15,30 +15,29 @@
 
 namespace Mmoreram\SymfonyBundleDependencies;
 
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\KernelInterface;
+
 /**
- * Trait BundleDependenciesResolver
+ * Trait BundleDependenciesResolver.
  */
 trait BundleDependenciesResolver
 {
     /**
-     * Get bundle instances given the namespace stack
+     * Get bundle instances given the namespace stack.
      *
-     * @param \Symfony\Component\HttpKernel\KernelInterface $kernel  Kernel
-     * @param array                                         $bundles Bundles defined by instances or namespaces
+     * @param KernelInterface $kernel  Kernel
+     * @param array           $bundles Bundles defined by instances or namespaces
      *
-     * @return \Symfony\Component\HttpKernel\Bundle\Bundle[] Bundle instances
+     * @return Bundle[] Bundle instances
      */
     protected function getBundleInstances(
-        \Symfony\Component\HttpKernel\KernelInterface $kernel,
+        KernelInterface $kernel,
         array $bundles
     ) {
-        $bundleStack = [];
-        $visitedBundles = [];
-        $this
-            ->resolveBundleDependencies(
+        $bundleStack = $this
+            ->resolveAndReturnBundleDependencies(
                 $kernel,
-                $bundleStack,
-                $visitedBundles,
                 $bundles
             );
 
@@ -52,18 +51,43 @@ trait BundleDependenciesResolver
     }
 
     /**
+     * Resolve all bundle dependencies and return them all in a single array.
+     *
+     * @param KernelInterface $kernel  Kernel
+     * @param array           $bundles Bundles defined by instances or namespaces
+     *
+     * @return Bundle[]|string[] Bundle definitions
+     */
+    protected function resolveAndReturnBundleDependencies(
+        KernelInterface $kernel,
+        array $bundles
+    ) {
+        $bundleStack = [];
+        $visitedBundles = [];
+        $this
+            ->resolveBundleDependencies(
+                $kernel,
+                $bundleStack,
+                $visitedBundles,
+                $bundles
+            );
+
+        return $bundleStack;
+    }
+
+    /**
      * Resolve bundle dependencies.
      *
      * Given a set of already loaded bundles and a set of new needed bundles,
      * build new dependencies and fill given array of loaded bundles.
      *
-     * @param \Symfony\Component\HttpKernel\KernelInterface $kernel         Kernel
-     * @param array                                         $bundleStack    Bundle stack, defined by Instance or Namespace
-     * @param array                                         $visitedBundles Visited bundles, defined by their namespaces
-     * @param array                                         $bundles        New bundles to check, defined by Instance or Namespace
+     * @param KernelInterface $kernel         Kernel
+     * @param array           $bundleStack    Bundle stack, defined by Instance or Namespace
+     * @param array           $visitedBundles Visited bundles, defined by their namespaces
+     * @param array           $bundles        New bundles to check, defined by Instance or Namespace
      */
     private function resolveBundleDependencies(
-        \Symfony\Component\HttpKernel\KernelInterface $kernel,
+        KernelInterface $kernel,
         array &$bundleStack,
         array &$visitedBundles,
         array $bundles
@@ -72,7 +96,7 @@ trait BundleDependenciesResolver
 
         foreach ($bundles as $bundle) {
 
-            /**
+            /*
              * Each visited node is prioritized and placed at the beginning.
              */
             $this
@@ -84,7 +108,7 @@ trait BundleDependenciesResolver
 
         foreach ($bundles as $bundle) {
             $bundleNamespace = $this->getBundleDefinitionNamespace($bundle);
-            /**
+            /*
              * If have already visited this bundle, continue. One bundle can be
              * processed once.
              */
@@ -96,7 +120,7 @@ trait BundleDependenciesResolver
             $bundleNamespaceObj = new \ReflectionClass($bundleNamespace);
             if ($bundleNamespaceObj->implementsInterface('Mmoreram\SymfonyBundleDependencies\DependentBundleInterface')) {
 
-                /**
+                /*
                  * @var \Mmoreram\SymfonyBundleDependencies\DependentBundleInterface|string $bundleNamespace
                  */
                 $bundleDependencies = $bundleNamespace::getBundleDependencies($kernel);
@@ -120,8 +144,8 @@ trait BundleDependenciesResolver
      * stack. If already exists, then remove the old entry just before adding it
      * again.
      *
-     * @param array                                              $bundleStack         Bundle stack, defined by Instance or Namespace
-     * @param \Symfony\Component\HttpKernel\Bundle\Bundle|string $elementToPrioritize Element to prioritize
+     * @param array         $bundleStack         Bundle stack, defined by Instance or Namespace
+     * @param Bundle|string $elementToPrioritize Element to prioritize
      */
     private function prioritizeBundle(
         array &$bundleStack,
@@ -139,9 +163,9 @@ trait BundleDependenciesResolver
     }
 
     /**
-     * Given a bundle instance or a namespace, return its namespace
+     * Given a bundle instance or a namespace, return its namespace.
      *
-     * @param \Symfony\Component\HttpKernel\Bundle\Bundle|string $bundle Bundle defined by Instance or Namespace
+     * @param Bundle|string $bundle Bundle defined by Instance or Namespace
      *
      * @return string Bundle namespace
      */
@@ -153,16 +177,18 @@ trait BundleDependenciesResolver
     }
 
     /**
-     * Given a bundle instance or a namespace, return the instance
+     * Given a bundle instance or a namespace, return the instance.
+     * Each bundle is instanced with the Kernel as the first element of the
+     * construction, by default.
      *
-     * @param \Symfony\Component\HttpKernel\Bundle\Bundle|string $bundle Bundle defined by Instance or Namespace
+     * @param Bundle|string $bundle Bundle defined by Instance or Namespace
      *
-     * @return \Symfony\Component\HttpKernel\Bundle\Bundle Bundle instance
+     * @return Bundle Bundle instance
      */
     private function getBundleDefinitionInstance($bundle)
     {
         return is_object($bundle)
             ? $bundle
-            : new $bundle();
+            : new $bundle($this);
     }
 }
