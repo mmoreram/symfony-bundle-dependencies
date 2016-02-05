@@ -17,6 +17,8 @@ namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
 use PHPUnit_Framework_TestCase;
 
+use Mmoreram\SymfonyBundleDependencies\Resolver\BundleDependenciesResolver;
+
 /**
  * Class BundleDependenciesResolverTest.
  */
@@ -27,34 +29,42 @@ class BundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testResolver1()
     {
-        $kernel = $this->prophesize('Symfony\Component\HttpKernel\KernelInterface');
-        $bundleDependenciesResolver = new BundleDependenciesResolverAware();
-        $bundles = $bundleDependenciesResolver->getInstancesTest1($kernel->reveal());
+        $kernel = $this->mockKernel();
+        $resolver = new BundleDependenciesResolver($kernel->reveal());
 
-        $this->assertInstanceOf(
-            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle1',
-            $bundles[0]
-        );
-
-        $this->assertInstanceOf(
-            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle2',
-            $bundles[1]
-        );
-
-        $this->assertInstanceOf(
-            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle4',
-            $bundles[2]
-        );
-
-        $this->assertInstanceOf(
+        $bundles = $resolver->resolve([
+            new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle3(),
             'Mmoreram\SymfonyBundleDependencies\Tests\Bundle5',
-            $bundles[3]
-        );
-        $this->assertEquals('A', $bundles[3]->getValue());
+        ]);
 
-        $this->assertInstanceOf(
+        $this->assertBundleOrder(
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle1',
             'Mmoreram\SymfonyBundleDependencies\Tests\Bundle3',
-            $bundles[4]
+            $bundles
+        );
+
+        $this->assertBundleOrder(
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle2',
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle3',
+            $bundles
+        );
+
+        $this->assertBundleOrder(
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle4',
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle3',
+            $bundles
+        );
+
+        $this->assertBundleOrder(
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle2',
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle1',
+            $bundles
+        );
+
+        $this->assertBundleOrder(
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle5',
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle1',
+            $bundles
         );
     }
 
@@ -63,23 +73,55 @@ class BundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testResolver2()
     {
-        $kernel = $this->prophesize('Symfony\Component\HttpKernel\KernelInterface');
-        $bundleDependenciesResolver = new BundleDependenciesResolverAware();
-        $bundles = $bundleDependenciesResolver->getInstancesTest2($kernel->reveal());
+        $kernel = $this->mockKernel();
+        $resolver = new BundleDependenciesResolver($kernel->reveal());
 
-        $this->assertInstanceOf(
-            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle1',
-            $bundles[0]
-        );
-
-        $this->assertInstanceOf(
+        $bundles = $resolver->resolve([
+            new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle1(),
             'Mmoreram\SymfonyBundleDependencies\Tests\Bundle2',
-            $bundles[1]
+        ]);
+
+        $this->assertBundleOrder(
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle5',
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle1',
+            $bundles
         );
 
-        $this->assertInstanceOf(
-            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle5',
-            $bundles[2]
+        $this->assertBundleOrder(
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle2',
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle1',
+            $bundles
         );
+    }
+
+    /**
+     * Check two bundles are in correct order of loading
+     *
+     * @param string $after   This bundle should be loaded after the one in $before
+     * @param string $before  This bundle should be loaded before the one in $after
+     * @param array  $bundles Array of bundles
+     */
+    private function assertBundleOrder($after, $before, array $bundles)
+    {
+        $bundleClasses = array_map('get_class', $bundles);
+
+        $this->assertTrue(
+            array_search($after, $bundleClasses) < array_search($before, $bundleClasses),
+            sprintf(
+                'Bundle "%s" should be loaded after "%s", but it is not',
+                $after,
+                $before
+            )
+        );
+    }
+
+    /**
+     * Mock a kernel
+     *
+     * @return \Prophecy\Prophecy\ObjectProphecy|\Symfony\Component\HttpKernel\KernelInterface
+     */
+    private function mockKernel()
+    {
+        return $this->prophesize('Symfony\Component\HttpKernel\KernelInterface');
     }
 }
