@@ -1,6 +1,8 @@
 Symfony Bundle Dependencies
 ===========================
 
+[![Build Status](https://travis-ci.org/mmoreram/symfony-bundle-dependencies.svg?branch=master)](https://travis-ci.org/mmoreram/symfony-bundle-dependencies)
+
 This package provides a very simple way of adding dependencies between Symfony
 Bundles. Composer defines these definitions in a very soft layer, only
 downloading these dependent packages. Bundles should as well force other
