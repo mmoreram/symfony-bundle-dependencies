@@ -29,6 +29,8 @@ interface DependentBundleInterface
      *
      * Values can be a simple bundle namespace or its instance
      *
+     * @param KernelInterface $kernel
+     *
      * @return array
      */
     public static function getBundleDependencies(KernelInterface $kernel) : array;
