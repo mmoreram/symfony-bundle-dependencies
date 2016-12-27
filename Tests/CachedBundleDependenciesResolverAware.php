@@ -13,6 +13,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -30,11 +32,11 @@ class CachedBundleDependenciesResolverAware
     /**
      * Get wrong cached bundle instances with Exception.
      *
-     * @param KernelInterface $kernel Kernel
+     * @param KernelInterface $kernel
      *
-     * @return Bundle[] Bundles
+     * @return Bundle[]
      */
-    public function getWrongInstancesWithException(KernelInterface $kernel)
+    public function getWrongInstancesWithException(KernelInterface $kernel) : array
     {
         $bundles = [
             new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle3(),
@@ -43,19 +45,18 @@ class CachedBundleDependenciesResolverAware
 
         return $this->getBundleInstances(
             $kernel,
-            $bundles,
-            true
+            $bundles
         );
     }
 
     /**
      * Get right cached bundle instances with Exception.
      *
-     * @param KernelInterface $kernel Kernel
+     * @param KernelInterface $kernel
      *
-     * @return Bundle[] Bundles
+     * @return Bundle[]
      */
-    public function getRightInstances(KernelInterface $kernel)
+    public function getRightInstances(KernelInterface $kernel) : array
     {
         $bundles = [
             'Mmoreram\SymfonyBundleDependencies\Tests\Bundle7',
@@ -63,29 +64,7 @@ class CachedBundleDependenciesResolverAware
 
         return $this->getBundleInstances(
             $kernel,
-            $bundles,
-            true
-        );
-    }
-
-    /**
-     * Get wrong cached bundle instances without Exception.
-     *
-     * @param KernelInterface $kernel Kernel
-     *
-     * @return Bundle[] Bundles
-     */
-    public function getWrongInstancesWithoutException(KernelInterface $kernel)
-    {
-        $bundles = [
-            new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle3(),
-            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle5',
-        ];
-
-        return $this->getBundleInstances(
-            $kernel,
-            $bundles,
-            false
+            $bundles
         );
     }
 }

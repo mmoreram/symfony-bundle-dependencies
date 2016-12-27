@@ -13,6 +13,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
 use PHPUnit_Framework_TestCase;

@@ -17,26 +17,22 @@ declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies;
 
-use Exception;
+use RuntimeException;
 
 /**
- * Class BundleStackNotCacheableException.
+ * Class BundleDependencyException.
  */
-class BundleStackNotCacheableException extends Exception
+class BundleDependencyException extends RuntimeException
 {
     /**
      * Construct the exception.
      *
-     * @param string $kernelNamespace
      * @param string $bundleNamespace
      */
-    public function __construct(
-        string $kernelNamespace,
-        string $bundleNamespace
-    ) {
+    public function __construct(string $bundleNamespace)
+    {
         $message = sprintf(
-            'Bundle stack of kernel %s cannot be cached because bundle %s is defined as an object instance instead of a namespace',
-            $kernelNamespace,
+            'The kernel or one of your required bundles is requiring the class %s, which is not a BundleInterface implementation',
             $bundleNamespace
         );
 

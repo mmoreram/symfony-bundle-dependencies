@@ -6,6 +6,7 @@ use-sort:
     sort-type: alph
     sort-direction: asc
 
+strict: true
 header: |
     /*
      * This file is part of the php-formatter package

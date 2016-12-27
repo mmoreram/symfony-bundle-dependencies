@@ -23,9 +23,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 
 /**
- * Class Bundle1.
+ * Class Bundle8.
  */
-class Bundle1 extends Bundle implements DependentBundleInterface
+class Bundle8 implements DependentBundleInterface
 {
     /**
      * Create instance of current bundle, and return dependent bundle namespaces.
@@ -35,8 +35,8 @@ class Bundle1 extends Bundle implements DependentBundleInterface
     public static function getBundleDependencies(KernelInterface $kernel) : array
     {
         return [
-            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle2',
-            new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle5('A'),
+            'Mmoreram\SymfonyBundleDependencies\Tests\Bundle6',
+            Bundle4::class,
         ];
     }
 }

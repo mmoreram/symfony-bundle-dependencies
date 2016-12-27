@@ -13,6 +13,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SymfonyBundleDependencies;
 
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -27,7 +29,7 @@ interface DependentBundleInterface
      *
      * Values can be a simple bundle namespace or its instance
      *
-     * @return array Bundle instances
+     * @return array
      */
-    public static function getBundleDependencies(KernelInterface $kernel);
+    public static function getBundleDependencies(KernelInterface $kernel) : array;
 }

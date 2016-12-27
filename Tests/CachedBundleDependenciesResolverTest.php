@@ -13,6 +13,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
 use PHPUnit_Framework_TestCase;
@@ -39,27 +41,9 @@ class CachedBundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test cached resolver with wrong dependencies and exception not thrown.
-     */
-    public function testCachedResolverWithWrongInstancedWithoutException()
-    {
-        $kernel = $this->prophesize('Symfony\Component\HttpKernel\KernelInterface');
-        $kernel->getCacheDir()->willReturn(dirname(__FILE__));
-        $cacheFile = dirname(__FILE__) . '/kernelDependenciesStack.php';
-
-        @unlink($cacheFile);
-        $bundleDependenciesResolver = new CachedBundleDependenciesResolverAware();
-        $bundleDependenciesResolver->getWrongInstancesWithoutException(
-            $kernel->reveal()
-        );
-
-        $this->assertFalse(file_exists($cacheFile));
-    }
-
-    /**
      * Test cached resolver with right dependencies.
      */
-    public function testCachedResolverWithRightInstancedWithException()
+    public function testCachedResolverWithRightInstanced()
     {
         $kernel = $this->prophesize('Symfony\Component\HttpKernel\KernelInterface');
         $kernel->getCacheDir()->willReturn(dirname(__FILE__));

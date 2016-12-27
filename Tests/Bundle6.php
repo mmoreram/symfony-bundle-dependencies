@@ -13,8 +13,11 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
@@ -22,14 +25,14 @@ use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 /**
  * Class Bundle6.
  */
-class Bundle6 implements DependentBundleInterface
+class Bundle6 extends Bundle implements DependentBundleInterface
 {
     /**
      * Create instance of current bundle, and return dependent bundle namespaces.
      *
-     * @return array Bundle instances
+     * @return array
      */
-    public static function getBundleDependencies(KernelInterface $kernel)
+    public static function getBundleDependencies(KernelInterface $kernel) : array
     {
         return [];
     }
