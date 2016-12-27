@@ -1,7 +1,10 @@
-Symfony Bundle Dependencies
-===========================
+# Symfony Bundle Dependencies
 
 [![Build Status](https://travis-ci.org/mmoreram/symfony-bundle-dependencies.svg?branch=master)](https://travis-ci.org/mmoreram/symfony-bundle-dependencies)
+
+> The minimum requirements of this bundle is **PHP 7.1** and **Symfony 3.2** 
+> because the bundle is using features on both versions. If you're not using
+> them yet, I encourage you to do it.
 
 This package provides a very simple way of adding dependencies between Symfony
 Bundles. Composer defines these definitions in a very soft layer, only
@@ -9,17 +12,10 @@ downloading these dependent packages. Bundles should as well force other
 Bundles to be instanced in the application to comply with Dependency Injection
 dependencies.
 
-## Installing
-
-To install this package you must add this dependency in your bundles or
-packages. Of course, adding this optional feature to your bundles, enable others
-to use this feature on their projects.
-
-``` json
-"require": {
-    "mmoreram/symfony-bundle-dependencies": "^1.0",
-},
-```
+* [For your bundle](#for-your-bundle)
+* [For your kernel](#for-your-kernel)
+* [Performance](#performance)
+* [The order](#the-order)
 
 ## For your Bundle
 

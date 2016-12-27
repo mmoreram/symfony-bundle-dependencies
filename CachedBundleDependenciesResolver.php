@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) >=2014 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,6 +12,8 @@
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
+
+declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies;
 
@@ -29,38 +31,17 @@ trait CachedBundleDependenciesResolver
     }
 
     /**
-     * @var string
-     *
-     * Throw Exception
-     */
-    private $throwException;
-
-    /**
-     * @var string
-     *
-     * Error type
-     */
-    private $errorType;
-
-    /**
      * Get bundle instances given the namespace stack.
      *
-     * @param KernelInterface $kernel         Kernel
-     * @param array           $bundles        Bundles defined by instances or namespaces
-     * @param bool            $throwException Throw Exception if not cacheable
-     * @param int             $errorType      Error type
+     * @param KernelInterface $kernel
+     * @param array           $bundles
      *
-     * @return Bundle[] Bundle instances
+     * @return Bundle[]
      */
     protected function getBundleInstances(
         KernelInterface $kernel,
-        array $bundles,
-        $throwException = false,
-        $errorType = E_USER_WARNING
-    ) {
-        $this->throwException = $throwException;
-        $this->errorType = $errorType;
-
+        array $bundles
+    ) : array {
         return $this->originalGetBundleInstances(
             $kernel,
             $bundles
@@ -70,10 +51,10 @@ trait CachedBundleDependenciesResolver
     /**
      * Resolve all bundle dependencies and return them all in a single array.
      *
-     * @param KernelInterface $kernel  Kernel
-     * @param array           $bundles Bundles defined by instances or namespaces
+     * @param KernelInterface $kernel
+     * @param array           $bundles
      *
-     * @return Bundle[]|string[] Bundle definitions
+     * @return Bundle[]|string[]
      */
     protected function resolveAndReturnBundleDependencies(
         KernelInterface $kernel,
@@ -104,38 +85,25 @@ trait CachedBundleDependenciesResolver
     /**
      * Cache the built bundles stack.
      * Only bundles stack with string definitions are allowed to be cached.
-     * Otherwise, will throw a notice.
+     * Otherwise, will throw an exception.
      *
-     * @param Bundle[]|string[] $bundleStack Bundle stack
-     * @param string            $cacheFile   Cache file
+     * @param Bundle[]|string[] $bundleStack
+     * @param string            $cacheFile
      *
      * @throws BundleStackNotCacheableException Bundles not cacheable
      */
     protected function cacheBuiltBundleStack(
         array $bundleStack,
-        $cacheFile
+        string $cacheFile
     ) {
         foreach ($bundleStack as $bundle) {
             if (is_object($bundle)) {
                 $kernelNamespace = get_class($this);
                 $bundleNamespace = get_class($bundle);
-                if ($this->throwException) {
-                    throw new BundleStackNotCacheableException(
-                        $kernelNamespace,
-                        $bundleNamespace
-                    );
-                } else {
-                    @trigger_error(
-                        sprintf(
-                            'Bundle stack of kernel %s cannot be cached because bundle %s is defined as an object instance instead of a namespace',
-                            $kernelNamespace,
-                            $bundleNamespace
-                        ),
-                        $this->errorType
-                    );
-                }
-
-                return;
+                throw new BundleStackNotCacheableException(
+                    $kernelNamespace,
+                    $bundleNamespace
+                );
             }
         }
 

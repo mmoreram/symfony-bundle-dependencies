@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) >=2014 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,9 +13,11 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\SymfonyBundleDependencies;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -26,15 +28,15 @@ trait BundleDependenciesResolver
     /**
      * Get bundle instances given the namespace stack.
      *
-     * @param KernelInterface $kernel  Kernel
-     * @param array           $bundles Bundles defined by instances or namespaces
+     * @param KernelInterface $kernel
+     * @param array           $bundles
      *
-     * @return Bundle[] Bundle instances
+     * @return BundleInterface[]
      */
     protected function getBundleInstances(
         KernelInterface $kernel,
         array $bundles
-    ) {
+    ) : array {
         $bundleStack = $this
             ->resolveAndReturnBundleDependencies(
                 $kernel,
@@ -53,15 +55,15 @@ trait BundleDependenciesResolver
     /**
      * Resolve all bundle dependencies and return them all in a single array.
      *
-     * @param KernelInterface $kernel  Kernel
-     * @param array           $bundles Bundles defined by instances or namespaces
+     * @param KernelInterface $kernel
+     * @param array           $bundles
      *
-     * @return Bundle[]|string[] Bundle definitions
+     * @return BundleInterface[]|string[]
      */
     protected function resolveAndReturnBundleDependencies(
         KernelInterface $kernel,
         array $bundles
-    ) {
+    ) : array {
         $bundleStack = [];
         $visitedBundles = [];
         $this
@@ -81,10 +83,10 @@ trait BundleDependenciesResolver
      * Given a set of already loaded bundles and a set of new needed bundles,
      * build new dependencies and fill given array of loaded bundles.
      *
-     * @param KernelInterface $kernel         Kernel
-     * @param array           $bundleStack    Bundle stack, defined by Instance or Namespace
-     * @param array           $visitedBundles Visited bundles, defined by their namespaces
-     * @param array           $bundles        New bundles to check, defined by Instance or Namespace
+     * @param KernelInterface $kernel
+     * @param array           $bundleStack
+     * @param array           $visitedBundles
+     * @param array           $bundles
      */
     private function resolveBundleDependencies(
         KernelInterface $kernel,
@@ -118,10 +120,10 @@ trait BundleDependenciesResolver
 
             $visitedBundles[$bundleNamespace] = true;
             $bundleNamespaceObj = new \ReflectionClass($bundleNamespace);
-            if ($bundleNamespaceObj->implementsInterface('Mmoreram\SymfonyBundleDependencies\DependentBundleInterface')) {
+            if ($bundleNamespaceObj->implementsInterface(DependentBundleInterface::class)) {
 
-                /*
-                 * @var \Mmoreram\SymfonyBundleDependencies\DependentBundleInterface|string $bundleNamespace
+                /**
+                 * @var DependentBundleInterface
                  */
                 $bundleDependencies = $bundleNamespace::getBundleDependencies($kernel);
 
@@ -144,8 +146,8 @@ trait BundleDependenciesResolver
      * stack. If already exists, then remove the old entry just before adding it
      * again.
      *
-     * @param array         $bundleStack         Bundle stack, defined by Instance or Namespace
-     * @param Bundle|string $elementToPrioritize Element to prioritize
+     * @param array                  $bundleStack
+     * @param BundleInterface|string $elementToPrioritize
      */
     private function prioritizeBundle(
         array &$bundleStack,
@@ -165,11 +167,11 @@ trait BundleDependenciesResolver
     /**
      * Given a bundle instance or a namespace, return its namespace.
      *
-     * @param Bundle|string $bundle Bundle defined by Instance or Namespace
+     * @param BundleInterface|string $bundle
      *
-     * @return string Bundle namespace
+     * @return string
      */
-    private function getBundleDefinitionNamespace($bundle)
+    private function getBundleDefinitionNamespace($bundle) : string
     {
         return ltrim(is_object($bundle)
             ? get_class($bundle)
@@ -181,14 +183,22 @@ trait BundleDependenciesResolver
      * Each bundle is instanced with the Kernel as the first element of the
      * construction, by default.
      *
-     * @param Bundle|string $bundle Bundle defined by Instance or Namespace
+     * @param BundleInterface|string $bundle
      *
-     * @return Bundle Bundle instance
+     * @return BundleInterface
+     *
+     * @throws BundleDependencyException Is not a BundleInterface implementation
      */
-    private function getBundleDefinitionInstance($bundle)
+    private function getBundleDefinitionInstance($bundle) : BundleInterface
     {
-        return is_object($bundle)
-            ? $bundle
-            : new $bundle($this);
+        if (!is_object($bundle)) {
+            $bundle = new $bundle($this);
+        }
+
+        if (!$bundle instanceof BundleInterface) {
+            throw new BundleDependencyException(get_class($bundle));
+        }
+
+        return $bundle;
     }
 }

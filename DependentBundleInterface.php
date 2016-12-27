@@ -3,7 +3,7 @@
 /*
  * This file is part of the php-formatter package
  *
- * Copyright (c) 2014 Marc Morera
+ * Copyright (c) >=2014 Marc Morera
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,6 +12,8 @@
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
+
+declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies;
 
@@ -27,7 +29,7 @@ interface DependentBundleInterface
      *
      * Values can be a simple bundle namespace or its instance
      *
-     * @return array Bundle instances
+     * @return array
      */
-    public static function getBundleDependencies(KernelInterface $kernel);
+    public static function getBundleDependencies(KernelInterface $kernel) : array;
 }

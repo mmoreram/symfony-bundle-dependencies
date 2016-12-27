@@ -1,12 +1,11 @@
-Contributing
-------------
+# Contributing
 
 This project follows some standards. If you want to collaborate, please ensure
 that your code fulfills these standards before any Pull Request.
 
 ``` bash
 composer.phar update
-composer.phar check-style
+composer.phar fix-code
 ```
 
 There is also a policy for contributing to this project. Pull requests must
