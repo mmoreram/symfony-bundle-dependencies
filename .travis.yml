@@ -5,7 +5,10 @@ sudo: false
 matrix:
     include:
         - php: 7.1
-          env: $SYMFONY_VERSION="^3.2"
+        - php: 7.1
+          env: COMPOSER_OPTIONS="--prefer-lowest --prefer-stable"
+        - php: 7.1
+          env: SYMFONY_VERSION="^3.2"
 
 before_install:
     - 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi;'
@@ -14,7 +17,7 @@ install:
     - composer update --prefer-source --no-interaction ${COMPOSER_OPTIONS}
 
 script:
-    - php vendor/bin/phpunit
+    - vendor/bin/phpunit
 
 notifications:
     email: false
