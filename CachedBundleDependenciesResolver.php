@@ -41,7 +41,7 @@ trait CachedBundleDependenciesResolver
     protected function getBundleInstances(
         KernelInterface $kernel,
         array $bundles
-    ) : array {
+    ): array {
         return $this->originalGetBundleInstances(
             $kernel,
             $bundles
