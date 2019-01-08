@@ -33,5 +33,5 @@ interface DependentBundleInterface
      *
      * @return array
      */
-    public static function getBundleDependencies(KernelInterface $kernel) : array;
+    public static function getBundleDependencies(KernelInterface $kernel): array;
 }

@@ -1,3 +1,4 @@
+.php_cs
 /vendor
 /bin/
 /composer.phar

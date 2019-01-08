@@ -36,7 +36,7 @@ trait BundleDependenciesResolver
     protected function getBundleInstances(
         KernelInterface $kernel,
         array $bundles
-    ) : array {
+    ): array {
         $bundleStack = $this
             ->resolveAndReturnBundleDependencies(
                 $kernel,
@@ -63,7 +63,7 @@ trait BundleDependenciesResolver
     protected function resolveAndReturnBundleDependencies(
         KernelInterface $kernel,
         array $bundles
-    ) : array {
+    ): array {
         $bundleStack = [];
         $visitedBundles = [];
         $this
@@ -97,7 +97,6 @@ trait BundleDependenciesResolver
         $bundles = array_reverse($bundles);
 
         foreach ($bundles as $bundle) {
-
             /*
              * Each visited node is prioritized and placed at the beginning.
              */
@@ -121,7 +120,6 @@ trait BundleDependenciesResolver
             $visitedBundles[$bundleNamespace] = true;
             $bundleNamespaceObj = new \ReflectionClass($bundleNamespace);
             if ($bundleNamespaceObj->implementsInterface(DependentBundleInterface::class)) {
-
                 /**
                  * @var DependentBundleInterface
                  */
@@ -171,7 +169,7 @@ trait BundleDependenciesResolver
      *
      * @return string
      */
-    private function getBundleDefinitionNamespace($bundle) : string
+    private function getBundleDefinitionNamespace($bundle): string
     {
         return ltrim(is_object($bundle)
             ? get_class($bundle)
@@ -189,7 +187,7 @@ trait BundleDependenciesResolver
      *
      * @throws BundleDependencyException Is not a BundleInterface implementation
      */
-    private function getBundleDefinitionInstance($bundle) : BundleInterface
+    private function getBundleDefinitionInstance($bundle): BundleInterface
     {
         if (!is_object($bundle)) {
             $bundle = new $bundle($this);

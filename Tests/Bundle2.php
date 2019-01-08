@@ -19,7 +19,6 @@ namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
-
 use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 
 /**
@@ -32,7 +31,7 @@ class Bundle2 extends Bundle implements DependentBundleInterface
      *
      * @return array
      */
-    public static function getBundleDependencies(KernelInterface $kernel) : array
+    public static function getBundleDependencies(KernelInterface $kernel): array
     {
         return [
             Bundle1::class,

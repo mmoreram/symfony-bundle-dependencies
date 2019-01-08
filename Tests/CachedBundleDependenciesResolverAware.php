@@ -19,7 +19,6 @@ namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
-
 use Mmoreram\SymfonyBundleDependencies\CachedBundleDependenciesResolver;
 
 /**
@@ -36,7 +35,7 @@ class CachedBundleDependenciesResolverAware
      *
      * @return Bundle[]
      */
-    public function getWrongInstancesWithException(KernelInterface $kernel) : array
+    public function getWrongInstancesWithException(KernelInterface $kernel): array
     {
         $bundles = [
             new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle3(),
@@ -56,7 +55,7 @@ class CachedBundleDependenciesResolverAware
      *
      * @return Bundle[]
      */
-    public function getRightInstances(KernelInterface $kernel) : array
+    public function getRightInstances(KernelInterface $kernel): array
     {
         $bundles = [
             'Mmoreram\SymfonyBundleDependencies\Tests\Bundle7',
