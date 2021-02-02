@@ -17,17 +17,19 @@ declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
-use PHPUnit_Framework_TestCase;
+use Mmoreram\SymfonyBundleDependencies\BundleDependencyException;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class BundleDependenciesResolverNotBundleTest.
  */
-class BundleDependenciesResolverNotBundleTest extends PHPUnit_Framework_TestCase
+class BundleDependenciesResolverNotBundleTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * Test cached resolver with wrong dependencies and exception thrown.
-     *
-     * @expectedException \Mmoreram\SymfonyBundleDependencies\BundleDependencyException
      */
     public function testCachedResolverWithWrongInstancedWithException()
     {
@@ -35,6 +37,7 @@ class BundleDependenciesResolverNotBundleTest extends PHPUnit_Framework_TestCase
         $kernel->getCacheDir()->willReturn(dirname(__FILE__));
 
         $bundleDependenciesResolver = new BundleDependenciesResolverAware();
+        $this->expectException(BundleDependencyException::class);
         $bundleDependenciesResolver->getInstancesTestNotBundle(
             $kernel->reveal()
         );

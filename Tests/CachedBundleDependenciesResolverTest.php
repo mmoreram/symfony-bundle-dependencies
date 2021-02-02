@@ -17,17 +17,19 @@ declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
-use PHPUnit_Framework_TestCase;
+use Mmoreram\SymfonyBundleDependencies\BundleStackNotCacheableException;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class CachedBundleDependenciesResolverTest.
  */
-class CachedBundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
+class CachedBundleDependenciesResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * Test cached resolver with wrong dependencies and exception thrown.
-     *
-     * @expectedException \Mmoreram\SymfonyBundleDependencies\BundleStackNotCacheableException
      */
     public function testCachedResolverWithWrongInstancedWithException()
     {
@@ -35,6 +37,7 @@ class CachedBundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
         $kernel->getCacheDir()->willReturn(dirname(__FILE__));
 
         $bundleDependenciesResolver = new CachedBundleDependenciesResolverAware();
+        $this->expectException(BundleStackNotCacheableException::class);
         $bundleDependenciesResolver->getWrongInstancesWithException(
             $kernel->reveal()
         );
@@ -47,7 +50,7 @@ class CachedBundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
     {
         $kernel = $this->prophesize('Symfony\Component\HttpKernel\KernelInterface');
         $kernel->getCacheDir()->willReturn(dirname(__FILE__));
-        $cacheFile = dirname(__FILE__) . '/kernelDependenciesStack.php';
+        $cacheFile = dirname(__FILE__).'/kernelDependenciesStack.php';
 
         @unlink($cacheFile);
         $bundleDependenciesResolver = new CachedBundleDependenciesResolverAware();

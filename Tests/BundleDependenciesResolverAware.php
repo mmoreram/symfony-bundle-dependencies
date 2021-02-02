@@ -17,9 +17,9 @@ declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
+use Mmoreram\SymfonyBundleDependencies\BundleDependenciesResolver;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Mmoreram\SymfonyBundleDependencies\BundleDependenciesResolver;
 
 /**
  * Class BundleDependenciesResolverAware.
@@ -38,7 +38,7 @@ class BundleDependenciesResolverAware
     public function getInstancesTest1(KernelInterface $kernel): array
     {
         $bundles = [
-            new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle3(),
+            new Bundle3(),
             'Mmoreram\SymfonyBundleDependencies\Tests\Bundle5',
         ];
 
@@ -58,7 +58,7 @@ class BundleDependenciesResolverAware
     public function getInstancesTest2(KernelInterface $kernel): array
     {
         $bundles = [
-            new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle1(),
+            new Bundle1(),
             'Mmoreram\SymfonyBundleDependencies\Tests\Bundle2',
         ];
 
@@ -78,7 +78,7 @@ class BundleDependenciesResolverAware
     public function getInstancesTestNotBundle(KernelInterface $kernel): array
     {
         $bundles = [
-            new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle1(),
+            new Bundle1(),
             Bundle8::class,
         ];
 

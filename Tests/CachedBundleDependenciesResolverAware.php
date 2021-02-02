@@ -17,9 +17,9 @@ declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
+use Mmoreram\SymfonyBundleDependencies\CachedBundleDependenciesResolver;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Mmoreram\SymfonyBundleDependencies\CachedBundleDependenciesResolver;
 
 /**
  * Class CachedBundleDependenciesResolverAware.
@@ -38,7 +38,7 @@ class CachedBundleDependenciesResolverAware
     public function getWrongInstancesWithException(KernelInterface $kernel): array
     {
         $bundles = [
-            new \Mmoreram\SymfonyBundleDependencies\Tests\Bundle3(),
+            new Bundle3(),
             'Mmoreram\SymfonyBundleDependencies\Tests\Bundle5',
         ];
 

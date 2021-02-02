@@ -60,7 +60,7 @@ trait CachedBundleDependenciesResolver
         KernelInterface $kernel,
         array $bundles
     ) {
-        $cacheFile = $kernel->getCacheDir() . '/kernelDependenciesStack.php';
+        $cacheFile = $kernel->getCacheDir().'/kernelDependenciesStack.php';
         if (!is_dir($kernel->getCacheDir())) {
             mkdir($kernel->getCacheDir(), 0777, true);
         }
@@ -100,16 +100,13 @@ trait CachedBundleDependenciesResolver
             if (is_object($bundle)) {
                 $kernelNamespace = get_class($this);
                 $bundleNamespace = get_class($bundle);
-                throw new BundleStackNotCacheableException(
-                    $kernelNamespace,
-                    $bundleNamespace
-                );
+                throw new BundleStackNotCacheableException($kernelNamespace, $bundleNamespace);
             }
         }
 
         file_put_contents(
             $cacheFile,
-            '<?php return ' . var_export($bundleStack, true) . ';'
+            '<?php return '.var_export($bundleStack, true).';'
         );
     }
 }

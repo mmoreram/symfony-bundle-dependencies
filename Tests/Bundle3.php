@@ -17,9 +17,9 @@ declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
+use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Mmoreram\SymfonyBundleDependencies\DependentBundleInterface;
 
 /**
  * Class Bundle3.

@@ -17,13 +17,16 @@ declare(strict_types=1);
 
 namespace Mmoreram\SymfonyBundleDependencies\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class BundleDependenciesResolverTest.
  */
-class BundleDependenciesResolverTest extends PHPUnit_Framework_TestCase
+class BundleDependenciesResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * Test resolver1.
      */
